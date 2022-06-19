@@ -88,7 +88,7 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
       break
     case 'autosticker':
       if (m.isGroup) {
-        if (!(isAdmin || isOwner)) {
+        if (!(isOwner)) {
           global.dfail('admin', m, conn)
           throw false
         }

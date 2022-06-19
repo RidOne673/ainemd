@@ -5,10 +5,6 @@ let handler = m => m
 handler.all = async function (m, { isBlocked }) {
     if (isBlocked) return
 
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - - - - - - - */
-/* - - - - - - - Ini autoresponder by aine - - - - - - - */
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
 let regs = /(aku cinta kamu)/i
     let isCintaKamu = regs.exec(m.text)
     let cinmu = [
@@ -27,10 +23,6 @@ let cintakamuh = cinmu[Math.floor(Math.random() * cinmu.length)]
         conn.reply(m.chat, `Aku juga sayang kamu ${cintakamuh}`, m)
     }, 1000)
     }
-    
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - - - - - - - */
-/* - - - - - - - Ini autoresponder by aine - - - - - - - */
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
     let regc = /(aku sayang kamu)/i
     let isSayangKamu = regc.exec(m.text)
@@ -51,10 +43,6 @@ let sayangkamuh = saymu[Math.floor(Math.random() * saymu.length)]
     }, 1000)
     }
     
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - - - - - - - */
-/* - - - - - - - Ini autoresponder by aine - - - - - - - */
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
     let regl = /(I love you|love you)/i
     let isLoveYou = regl.exec(m.text)
     let lovou = [
@@ -75,10 +63,6 @@ let loveyou = lovou[Math.floor(Math.random() * lovou.length)]
     }, 1000)
     }
     
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - - - - - - - */
-/* - - - - - - - Ini autoresponder by aine - - - - - - - */
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-    
     let ass = /(assalamualaikum|assallamualaikum|assalamu\'alaikum|as\'salamualaikum)/i
     let isAss = ass.exec(m.text)
     let assal = [
@@ -96,30 +80,6 @@ let assl = assal[Math.floor(Math.random() * assal.length)]
         }})
     setTimeout(() => {
     conn.sendFile(m.chat, assalamualaikum, '', '', m, true)
-    }, 1000)
-    }
-
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - - - - - - - */
-/* - - - - - - - Ini autoresponder by aine - - - - - - - */
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-    
-    let hiai = /(hi|hii|hiii|hy|halo|hallo|helo|hello)/i
-    let isAih = hiai.exec(m.text)
-    let hiain = [
-'🥰',
-'😇',
-'😅'
-]
-let hiaine = hiain[Math.floor(Math.random() * hiain.length)]
-    if (isAih && !m.fromMe) {
-    let helloaine = fs.readFileSync('./mp3/WhatsApp-Ptt-2021-07-14-at-18.12.33.opus') 
-    conn.sendMessage(m.chat, {
-        react: {
-          text: `${hiaine}`,
-          key: m.key,
-        }})
-    setTimeout(() => {
-    conn.sendFile(m.chat, helloaine, '', '', m, true)
     }, 1000)
     }
 
