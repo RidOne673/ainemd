@@ -6,6 +6,7 @@ let { spawn } = require('child_process')
 const defaultLang = 'id'
 let handler = async (m, { conn, args }) => {
 
+if (!args[0]) throw "Usage .tts id text\nid can be replaced with other language code"
   let lang = args[0]
   let text = args.slice(1).join(' ')
   if ((args[0] || '').length !== 2) {
