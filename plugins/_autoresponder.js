@@ -93,7 +93,7 @@ let assl = assal[Math.floor(Math.random() * assal.length)]
 ]
 let marec = maciw[Math.floor(Math.random() * maciw.length)]
     if (isThx && !m.fromMe) {
-    let maaci = fs.readFileSync('./mp3/sama.mp3')
+    let maaci = fs.readFileSync('./mp3/sama.m4a')
     conn.sendMessage(m.chat, {
         react: {
           text: `${marec}`,
