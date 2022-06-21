@@ -2,6 +2,7 @@ let { instagramStory } = require('@bochilteam/scraper')
 
 let handler = async (m, { conn, args, text, usedPrefix, command }) => {
   if (!text) throw `*Perintah ini untuk mengunduh postingan instagram story*\n\nContoh:\n${usedPrefix + command} alinursetiawan24`
+  if (text.includes("https://")) throw 'Masukka username goblok..!!!'
   let res = await instagramStory(text)
     await m.reply('Sedang di proses..')
     for (let { url, type } of res.results) {
