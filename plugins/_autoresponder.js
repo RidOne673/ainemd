@@ -82,6 +82,27 @@ let assl = assal[Math.floor(Math.random() * assal.length)]
     conn.sendFile(m.chat, assalamualaikum, '', '', m, true)
     }, 1000)
     }
+    
+  let thx = /(terimakasih|makasi|maaci|terima kasih|maciw|mksi)/i
+    let isThx = thx.exec(m.text)
+    let maciw = [
+'🥰',
+'🫶🏻',
+'🫰🏻',
+'🫡'
+]
+let marec = maciw[Math.floor(Math.random() * maciw.length)]
+    if (isThx && !m.fromMe) {
+    let maaci = fs.readFileSync('./mp3/sama.mp3')
+    conn.sendMessage(m.chat, {
+        react: {
+          text: `${marec}`,
+          key: m.key,
+        }})
+    setTimeout(() => {
+    conn.sendFile(m.chat, maaci, '', '', m, true)
+    }, 1000)
+    }
 
 }
 
