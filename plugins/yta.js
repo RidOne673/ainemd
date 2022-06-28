@@ -1,70 +1,17 @@
-/*let limit = 50
-// const { servers, yta } = require('../lib/y2mate')
-const { youtubedl, youtubedlv2 } = require('@bochilteam/scraper')
-let handler = async (m, { conn, args, isPrems, isOwner }) => {
-  if (!args || !args[0]) throw 'Uhm... urlnya mana?'
-  let chat = global.db.data.chats[m.chat]
-  // let server = (args[1] || servers[0]).toLowerCase()
-  const isY = /y(es)/gi.test(args[1])
-  const { thumbnail, audio: _audio, title } = await youtubedl(args[0]).catch(async _ => await youtubedlv2(args[0]))
-  let audio, link = '', lastError
-  for (let i in _audio) {
-    try {
-      audio = _audio[i]
-      link = await audio.download()
-      if (link) break
-    } catch (e) {
-      lastError = e
-      continue
-    }
-  }
-  if (!link) throw lastError
-  // let { dl_link, thumb, title, filesize, filesizeF } = await yta(args[0], servers.includes(server) ? server : servers[0])
-  let isLimit = (isPrems || isOwner ? 99 : limit) * 1024 < audio.fileSize
-  if (!isY) conn.sendFile(m.chat, thumbnail, 'thumbnail.jpg', `
-📌*Title:* ${title}
-🗎 *Filesize:* ${audio.fileSizeH}
-*${isLimit ? 'Pakai ' : ''}Link:* ${link}
-`.trim(), m)
-  if (!isLimit) conn.sendFile(m.chat, link, title + '.mp3', `
-📌 *Title:* ${title}
-🗎 *Filesize:* ${audio.fileSizeH}
-`.trim(), m, null, {
-    asDocument: chat.useDocument
-  })
-}
-handler.help = ['mp3', 'a'].map(v => 'yt' + v + ` <url> <without message>`)
-handler.tags = ['downloader']
-handler.command = /^yt(a|mp3)$/i
-
-handler.exp = 0
-
-module.exports = handler*/
-
-
-
-
 let limit = 30
-const { servers, yta } = require('../lib/y2mate')
+const { yta } = require('../lib/y2mate')
+const util = require('util')
 let handler = async (m, { conn, args, isPrems, isOwner }) => {
-  if (!args || !args[0]) throw 'Uhm... urlnya mana?'
-  let chat = global.db.data.chats[m.chat]
-  let server = (args[1] || servers[0]).toLowerCase()
-  let { dl_link, thumb, title, filesize, filesizeF} = await yta(args[0], servers.includes(server) ? server : servers[0])
-  let isLimit = (isPrems || isOwner ? 99 : limit) * 1024 < filesize
-  conn.sendFile(m.chat, thumb, 'thumbnail.jpg', `
-*Title:* ${title}
-*Filesize:* ${filesizeF}
-*${isLimit ? 'Pakai ': ''}Link:* ${await shortlink(dl_link)}
-`.trim(), m)
-  if (!isLimit) conn.sendFile(m.chat, dl_link, title + '.mp3', `
-*Title:* ${title}
-*Filesize:* ${filesizeF}
-`.trim(), m, null, {
-  asDocument: chat.useDocument
-})
+  if (!args[0]) throw `Example : .ytmp3 https://youtube.com/watch?v=PtFMh6Tccag%27 128kbps`
+ if (!isUrl(m.text)) throw 'Please enter the YouTube link'
+let quality = args[1] ? args[1] : '128kbps'
+let media = await yta(args[0], quality)
+if (media.filesize >= 100000) return m.reply('File Melebihi Batas '+util.format(media))
+conn.sendMessage(m.chat, {image : { url: media.thumb}, caption: `⭔ Title : ${media.title}\n⭔ File Size : ${media.filesizeF}\n⭔ Url : ${await isUrl(m.text)}\n⭔ Ext : MP3\n⭔ Resolusi : ${args[1] || '128kbps'}\n\n${await shortlink(media.dl_link)}`}, {quoted: m})
+conn.sendMessage(m.chat, { audio: { url: media.dl_link }, mimetype: 'audio/mpeg', fileName: `${media.title}.mp3` }, { quoted: m })
 }
-handler.help = ['mp3','a'].map(v => 'yt' + v + ` <url> [server: ${servers.join(', ')}]`)
+
+handler.help = ['mp3','a'].map(v => 'yt' + v + ` <url> `)
 handler.tags = ['downloader']
 handler.command = /^yt(a|mp3)$/i
 handler.owner = false
@@ -87,5 +34,6 @@ isurl = /https?:\/\//.test(url)
 return isurl ? (await require('axios').get('https://tinyurl.com/api-create.php?url='+encodeURIComponent(url))).data : ''
 }
 
-
-
+function isUrl(url) {
+  return url.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/, 'gi'))
+}

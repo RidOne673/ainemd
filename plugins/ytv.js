@@ -1,77 +1,15 @@
-/*let limit = 30
-const fetch = require('node-fetch')
-// const { servers, ytv } = require('../lib/y2mate')
-const { youtubedl, youtubedlv2 } = require('@bochilteam/scraper')
-let handler = async (m, { conn, args, isPrems, isOwner }) => {
-  if (!args || !args[0]) throw 'Uhm... urlnya mana?'
-  let chat = global.db.data.chats[m.chat]
-  let isY = /y(es)/gi.test(args[1])
-  const { thumbnail, video: _video, title } = await youtubedl(args[0]).catch(async _ => await youtubedlv2(args[0]))
-  let video, link = '', lastError
-  for (let i in _video) {
-    try {
-      video = _video[i]
-      link = await video.download()
-      if (link) break
-    } catch (e) {
-      lastError = e
-      continue
-    }
-  }
-  if (!link) throw lastError
-  let isLimit = (isPrems || isOwner ? 99 : limit) * 1024 < video.fileSize
-  if (!isY) conn.sendFile(m.chat, thumbnail, 'thumbnail.jpg', `
-📌*Title:* ${title}
-🗎 *Filesize:* ${video.fileSizeH}
-*${isLimit ? 'Pakai ' : ''}Link:* ${link}
-`.trim(), m)
-  let _thumb = {}
-  try { _thumb = { thumbnail: await (await fetch(thumbnail)).buffer() } }
-  catch (e) { }
-  if (!isLimit) conn.sendFile(m.chat, link, title + '.mp4', `
-📌 *Title:* ${title}
-🗎 *Filesize:* ${video.fileSizeH}
-`.trim(), m, false, {
-    ..._thumb,
-    asDocument: chat.useDocument
-  })
-}
-handler.help = ['mp4', 'v', ''].map(v => 'yt' + v + ` <url> <without message>`)
-handler.tags = ['downloader']
-handler.command = /^yt(v|mp4)?$/i
-
-handler.exp = 0
-
-
-module.exports = handler*/
-
-
 let limit = 30
-let fetch = require('node-fetch')
-const { servers, ytv } = require('../lib/y2mate')
+const { ytv } = require('../lib/y2mate')
+const util = require('util')
 let handler = async (m, { conn, args, isPrems, isOwner }) => {
-  if (!args || !args[0]) throw 'Uhm... urlnya mana?'
-  let chat = global.db.data.chats[m.chat]
-  let server = (args[1] || servers[0]).toLowerCase()
-  let { dl_link, thumb, title, filesize, filesizeF} = await ytv(args[0], servers.includes(server) ? server : servers[0])
-  let isLimit = (isPrems || isOwner ? 99 : limit) * 1024 < filesize
-  conn.sendFile(m.chat, thumb, 'thumbnail.jpg', `
-*Title:* ${title}
-*Filesize:* ${filesizeF}
-*${isLimit ? 'Pakai ': ''}Link:* ${await shortlink(dl_link)}
-`.trim(), m)
-  let _thumb = {}
-  try { _thumb = { thumbnail: await (await fetch(thumb)).buffer() } }
-  catch (e) { }
-  if (!isLimit) conn.sendFile(m.chat, dl_link, title + '.mp4', `
-*Title:* ${title}
-*Filesize:* ${filesizeF}
-`.trim(), m, false, {
-  ..._thumb,
-  asDocument: chat.useDocument
-})
+if (!args[0]) throw `Example : .ytmp4 https://youtube.com/watch?v=PtFMh6Tccag%27 360p`
+if (!isUrl(m.text)) throw 'Please enter the YouTube link'
+let quality = args[1] ? args[1] : '360p'
+let media = await ytv(args[0], quality)
+if (media.filesize >= 100000) return m.reply('File Melebihi Batas '+util.format(media))
+conn.sendMessage(m.chat, { video: { url: media.dl_link }, mimetype: 'video/mp4', fileName: `${media.title}.mp4`, caption: `⭔ Title : ${media.title}\n⭔ File Size : ${media.filesizeF}\n⭔ Url : ${isUrl(m.text)}\n⭔ Ext : MP3\n⭔ Resolusi : ${args[1] || '360p'}\n\n${await shortlink(media.dl_link)}` }, { quoted: m })
 }
-handler.help = ['mp4','v',''].map(v => 'yt' + v + ` <url> [server: ${servers.join(', ')}]`)
+handler.help = ['mp4','v',''].map(v => 'yt' + v + ` <url>`)
 handler.tags = ['downloader']
 handler.command = /^yt(v|mp4)?$/i
 handler.owner = false
@@ -94,3 +32,6 @@ isurl = /https?:\/\//.test(url)
 return isurl ? (await require('axios').get('https://tinyurl.com/api-create.php?url='+encodeURIComponent(url))).data : ''
 }
 
+function isUrl(url) {
+  return url.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/, 'gi'))
+}
