@@ -15,18 +15,18 @@ let handler = async (m, { conn, usedPrefix }) => {
          let _pancingan = global.db.data.users[m.sender].anakpancingan 
          let aineh = `
 *Fish Pond*
-Hiu: ${hiu}
-Ikan: ${ikan}
-Dory: ${dory}
-Orca: ${orca}
-Paus: ${paus}
-Cumi: ${cumi}
-Gurita: ${gurita}
-Buntal: ${buntal}
-Udang: ${udang}
-Lumba²: ${lumba}
-Lobster: ${lobster}
-Kepiting: ${kepiting}
+🦈Shark: ${hiu}
+🐟Ikan: ${ikan}
+🐠Dory: ${dory}
+🐋Orca: ${orca}
+🐳Paus: ${paus}
+🦑Cumi: ${cumi}
+🐙Gurita: ${gurita}
+🐡Buntal: ${buntal}
+🦐Udang: ${udang}
+🐬Lumba: ${lumba}
+🦞Lobster: ${lobster}
+🦀Kepiting: ${kepiting}
 
 *Level Pancingan:*
 Pancingan: *${pancingan == 0 ? 'Tidak Punya' : '' || pancingan == 1 ? 'Level 1' : '' || pancingan == 2 ? 'Level 2' : '' || pancingan == 3 ? 'Level 3' : '' || pancingan == 4 ? 'Level 4' : '' || pancingan == 5 ? 'Level MAX' : ''}*
@@ -45,4 +45,3 @@ handler.command = /^(kolam)$/i
 handler.limit = true
 handler.group = true
 module.exports = handler
-
