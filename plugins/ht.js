@@ -4,7 +4,7 @@ let handler = async (m, { conn, text }) => {
   else conn.hartatahta[m.chat] = true
   m.reply('_Sedang membuat..._\n*Mohon tunggu sekitar 1 menit*')
   try {
-    let img = await ht(text ? text : ':v')
+    let img = await ht(text.toUpperCase())
     conn.sendFile(m.chat, img, 'Harta Tahta.png', `*${global.wm}*\nMade by ❤️`, m)
   } finally {
     delete conn.hartatahta[m.chat]
@@ -103,4 +103,3 @@ function pickRandom(list) {
 function rand(min, max, q = 0.001) {
   return Math.floor((Math.random() * (max - min)) / q) * q
 }
-
