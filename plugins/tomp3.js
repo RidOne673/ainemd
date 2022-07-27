@@ -1,4 +1,4 @@
-const { toAudio, toPTT } = require('../lib/converter')
+const { toMp3, toPTT } = require('../lib/converter')
 
 let handler = async (m, { conn, usedPrefix, command }) => {
   let q = m.quoted ? m.quoted : m
@@ -7,9 +7,9 @@ let handler = async (m, { conn, usedPrefix, command }) => {
     if (!/video|audio/.test(mime)) throw `Balas video/audio dengan perintah *${usedPrefix + command}*`
     let media = await q.download()
     if (!media) throw 'Media tidak dapat diunduh'
-    let audio = await toAudio(media, 'mp4')
+    let audio = await toMp3(media, 'mp4')
     if (!audio.data) throw 'Gagal melakukan konversi.'
-    await conn.sendFile(m.chat, audio.data, 'file.mp3', '', m, 0, { mimetype: 'audio/mp4', asDocument: global.db.data.chats[m.chat].useDocument })
+    await conn.sendFile(m.chat, audio.data, 'converter.mp3', '', m, 0, { mimetype: 'audio/mp4', asDocument: global.db.data.chats[m.chat].useDocument })
   }
   if (/vn|ptt$/i.test(command)) {
     if (!/video|audio/.test(mime)) throw `Balas video/audio dengan perintah *${usedPrefix + command}*`
@@ -24,4 +24,4 @@ handler.help = ['tomp3', 'tovn']
 handler.tags = ['audio']
 handler.command = /^to(mp3|a(udio)?|vn|ptt)$/i
 
-module.exports = handler
+module.exports = handler 

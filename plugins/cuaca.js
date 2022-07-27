@@ -39,7 +39,7 @@ console.log(e)
 
 handler.help = ['infocuaca <city>']
 handler.tags = ['info']
-handler.command = /^infocuaca|weather$/i
+handler.command = /^infocuaca|weather|cuaca$/i
 handler.limit = true
 
 module.exports = handler
