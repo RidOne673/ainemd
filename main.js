@@ -9,7 +9,7 @@ const WebSocket = require('ws')
 const path = require('path')
 const pino = require('pino')
 //const { prettifier } = require('pino-pretty')
-const fs = require('fs')
+const fs = require('fs-extra')
 const yargs = require('yargs/yargs')
 const cp = require('child_process')
 const _ = require('lodash')
@@ -109,6 +109,11 @@ if (!opts['test']) {
     } catch (e) { console.error(e) }
   }, 60 * 1000)
 }
+setInterval(() => {
+	fs.emptyDirSync('tmp')
+	console.log(`successfully clear tmp`)
+	conn.sendMessage(`6285706174510@s.whatsapp.net`, {text: 'Successfully clear tmp!' })
+}, 60 * 1000)
 if (opts['server']) require('./server')(global.conn, PORT)
 
 function clearTmp() {
