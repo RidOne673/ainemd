@@ -1,18 +1,13 @@
-const { exec } = require('child_process');
+const fs = require('fs-extra');
 
 function start() {
 //Start
-exec(`rm -rf tmp && mkdir tmp`, (err, stdout) => {
-  if (err) console.log(err)
-  console.log('tmp already cleaned')
-  })
-  
+ fs.emptyDirSync('tmp')
+ console.log('Dome cleaned')
   //Set Interval 1 jam
 setInterval(() => {
-exec(`rm -rf tmp && mkdir tmp`, (err, stdout) => {
-  if (err) console.log(err)
-  console.log('tmp already cleaned')
-  })
-}, 60 * 60 * 1000);
+fs.emptyDirSync('tmp')
+console.log('Dome cleaned')
+}, 5 * 60 * 60 * 1000);
 }
 start()
