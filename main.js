@@ -112,7 +112,7 @@ if (!opts['test']) {
 setInterval(() => {
 	fs.emptyDirSync('tmp')
 	console.log(`successfully clear tmp`)
-	conn.sendMessage(`6285706174510@s.whatsapp.net`, {text: 'Successfully clear tmp!' })
+	//conn.sendMessage(`6285706174510@s.whatsapp.net`, {text: 'Successfully clear tmp!' })
 }, 60 * 1000)
 if (opts['server']) require('./server')(global.conn, PORT)
 
