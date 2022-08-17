@@ -1,9 +1,9 @@
-let { tiktokdl } = require("@bochilteam/scraper")
+let { tiktokdlv3 } = require("@bochilteam/scraper")
 let handler = async (m, { conn, args, usedPrefix, command }) => {
   
   if (!args[0]) throw "Plase insert a tiktok url"
   if (!args[0].includes("tiktok.com")) throw "Vailed urls!"
-  let anu = await tiktokdl(args[0])
+  let anu = await tiktokdlv3(args[0])
   m.reply("Wait a minutes....")
    await conn.sendMessage(m.chat, {video: { url: anu.video.no_watermark}}, {quoted: m})
 }
