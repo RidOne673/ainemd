@@ -252,7 +252,7 @@ CFonts.say(`${package.name}`, {
 
 var isRunning = false
 
-require("http").createServer((_, res) => res.end("Octave bot is runing....")).listen(8080)
+//require("http").createServer((_, res) => res.end("Octave bot is runing....")).listen(8080)
 
 /**
  * Start a js file

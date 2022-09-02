@@ -5,9 +5,18 @@ const {
   makeWALegacySocket,
   DisconnectReason
 } = require('@adiwajshing/baileys')
+const {
+  Coordinates,
+  CalculationMethod,
+  PrayerTimes,
+  SunnahTimes,
+  Prayer,
+  Qibla,
+} = require('adhan')
 const WebSocket = require('ws')
 const path = require('path')
 const pino = require('pino')
+let axios = require('axios')
 //const { prettifier } = require('pino-pretty')
 const fs = require('fs-extra')
 const yargs = require('yargs/yargs')
@@ -17,7 +26,7 @@ const syntaxerror = require('syntax-error')
 // const P = require('pino')
 const os = require('os')
 const moment = require("moment-timezone")
-const time = moment.tz('Asia/Jakarta').format("HH:mm:ss")
+var time = moment.tz('Asia/Jakarta').format("HH:mm:ss")
 const { color } = require('./lib/color')
 let simple = require('./lib/simple')
 var low
@@ -109,11 +118,66 @@ if (!opts['test']) {
     } catch (e) { console.error(e) }
   }, 60 * 1000)
 }
+///interval auto clear tmp
 setInterval(() => {
 	fs.emptyDirSync('tmp')
 	console.log(`successfully clear tmp`)
-	//conn.sendMessage(`6285706174510@s.whatsapp.net`, {text: 'Successfully clear tmp!' })
+//conn.sendMessage(`6285706174510@s.whatsapp.net`, {text: 'Successfully clear tmp!' })
 }, 60 * 1000)
+  ///interval prayer times 
+  setInterval(() => {
+  var time = moment.tz('Asia/Taipei').format('HH:mm:ss');
+var coordinates = new Coordinates(23.933861,120.666485);
+var params = CalculationMethod.MoonsightingCommittee();
+var date = new Date()
+var prayerTimes = new PrayerTimes(coordinates, date, params);
+var res0 = moment(prayerTimes.fajr).tz('Asia/Taipei').format('HH:mm:ss');
+var res1 = moment(prayerTimes.dhuhr).tz('Asia/Taipei').format('HH:mm:ss');
+var res2 = moment(prayerTimes.asr).tz('Asia/Taipei').format('HH:mm:ss');
+var res3 = moment(prayerTimes.maghrib).tz('Asia/Taipei').format('HH:mm:ss');
+var res4 = moment(prayerTimes.isha).tz('Asia/Taipei').format('HH:mm:ss');
+
+var capt = `🌄 Subuh : ${res0}
+☀️ Dhuhur : ${res1}
+🌥️ Ashar : ${res2}
+🌅 Maghrib : ${res3}
+🌙 Isya : ${res4}` 
+
+if (time == res0) {
+  conn.sendMessage('6285706174510@s.whatsapp.net', {text: `Time for prayer Subuh!`})
+  conn.updateProfileStatus(capt + '  Times taipei')
+} else if (time == res1) {
+  conn.sendMessage('6285706174510@s.whatsapp.net', {text: `Time for prayer Dzuhur!`})
+} else if (time == res2) {
+  conn.sendMessage('6285706174510@s.whatsapp.net', {text: `Time for prayer Ashar!`})
+} else if (time == res3) {
+  conn.sendMessage('6285706174510@s.whatsapp.net', {text: `Time for prayer Maghrib!`})
+} else if (time == res4) {
+  conn.sendMessage('6285706174510@s.whatsapp.net', {text: `Time for prayer Isya!`})
+} else if (time == '08:00:00') {
+  conn.sendMessage('6285706174510@s.whatsapp.net', {text: capt})
+}
+console.log('Prayertime is running...')
+}, 1000)
+/// interval pulang
+setInterval(() => {
+var time = moment.tz('Asia/Taipei').format('HH:mm:ss');
+countDownDate = new Date(`07,27,2025,00:00:00`).getTime();
+now = new Date().getTime();
+distance = countDownDate - now;
+days = Math.floor(distance / (1000 * 60 * 60 * 24));
+if (distance < 0) {
+times = ("Terlewat");
+} else {
+times = (days + " Hari Lagi Menuju pulang:')");
+}
+if (time === '06:00:00') {
+conn.sendMessage("6285706174510@s.whatsapp.net", {text: times})
+} else {
+  console.log(times + '\nHHInterval is running..')
+}
+}, 1000)
+
 if (opts['server']) require('./server')(global.conn, PORT)
 
 function clearTmp() {
