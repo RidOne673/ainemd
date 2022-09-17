@@ -1,9 +1,10 @@
-//let { bioskopNow } = require('@bochilteam/scraper')
+let { bioskopNow } = require('@bochilteam/scraper')
 
 let handler = async (m, { conn }) => {
   let anu = await bioskopNow()
   anu.forEach(async(data, i) => {
-    setTimeout(() => {
+    setTimeout(async() => {
+      link = await shortlink(data.url)
       txt = `• *Title* : ${data.title}
 • *Url* : ${await shortlink(data.url)}
 • *Genre* : ${data.genre}
