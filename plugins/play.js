@@ -1,7 +1,9 @@
 let limit = 30
 let yts = require('yt-search')
+const { isUrl } = require('./../lib/function')
 let handler = async (m, { conn, command, usedPrefix, text, isPrems, isOwner }) => {
 if (!text) throw `Example : .${command} story wa anime`
+if (isUrl(text)) throw 'Unsuported URLs\n\nPlease insert title!'
 let search = await yts(text)
 let anu = search.videos[Math.floor(Math.random() * 1)]
 let buttons = [

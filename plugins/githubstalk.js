@@ -1,9 +1,10 @@
 const axios = require ("axios")
 const fetch = require("node-fetch")
+const { isUrl } = require('./../lib/function')
 const { MessageType } = require('@adiwajshing/baileys')
 let handler = async(m, { conn, text }) => {
   if (!text) return conn.reply(m.chat, 'Harap Masukan Username', m)
-
+if (isUrl(text)) throw 'Please insert username!'
   await m.reply('Searching...')
     let anu = await fetch(`https://api.github.com/users/${text}`).then(a => a.json())
     let thumb = await getBuffer(anu.avatar_url)
